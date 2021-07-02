@@ -1,6 +1,7 @@
 # Fortell in Python
 A python function that is based off the streamlined R library[ Foretell](https://cran.r-project.org/web/packages/foretell/foretell.pdf). Included is a [bdw function](https://rdrr.io/cran/foretell/src/R/BdW.R) & [bg Function](https://rdrr.io/cran/foretell/man/BG.html) to project customer retention using [Fader and Hardie's method](http://brucehardie.com/papers/037/BdW_JIM_2018-01-10_rev.pdf) with Scipy.
 
+# Beta Discrete Weibull Example:
 ```python
 import pandas as pd
 import numpy as np
