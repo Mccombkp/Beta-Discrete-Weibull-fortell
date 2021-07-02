@@ -31,8 +31,8 @@ Day,Retention
 """
 
 data = io.StringIO(data_string)
-dddd = pd.read_csv(data, sep=",")
-dddd['Retention'] = dddd['Retention'] *100
+data = pd.read_csv(data, sep=",")
+data['Retention'] = data['Retention'] *100
 
-fortell_bdw(surv_value=round(dddd['Retention'][0:5]),h=18)
+fortell_bdw(surv_value=round(data['Retention'][0:5]),h=18)
 ```
