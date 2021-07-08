@@ -2,6 +2,7 @@
 A python function that is based off the streamlined R library[ Foretell](https://cran.r-project.org/web/packages/foretell/foretell.pdf). Included is a [bdw function](https://rdrr.io/cran/foretell/src/R/BdW.R) & [bg Function](https://rdrr.io/cran/foretell/man/BG.html) to project customer retention using [Fader and Hardie's method](http://brucehardie.com/papers/037/BdW_JIM_2018-01-10_rev.pdf) with Scipy.
 
 # Beta Discrete Weibull Example:
+Load up some sample data:
 ```python
 import pandas as pd
 import numpy as np
@@ -34,10 +35,10 @@ Day,Retention
 data = io.StringIO(data_string)
 data = pd.read_csv(data, sep=",")
 data['Retention'] = data['Retention'] *100
+```
 
-
-
-
+Run the Function
+```python
 import scipy.special as sc
 from scipy.optimize import minimize
 from scipy.special import beta
@@ -82,30 +83,40 @@ def fortell_bdw(surv_value,h):
     
 #     bdw_projection = pd.DataFrame(bdw_projection,columns =['BdW']).reset_index()
     return bdw_projection
+```
+Apply it to your data, and plot it out:
+```python
+data['BdW'] = fortell_bdw(surv_value=round(data['Retention'][0:6]),h=19)
+data
 
 
-fortell_bdw(surv_value=round(data['Retention'][0:5]),h=18)
+x = data['Day'].astype(str)
+y = data['Retention']
+y2 = data['BdW']
+
+fig, ax = plt.subplots()
+ax.plot(x, y, label = 'Actual',linewidth=2)
+ax.plot(x, y2, label = 'BdW',linewidth=2)
+
+
+ax.set_ylim(bottom=75)
+
+plt.axvline(x=6)
+
+
+ax.text(0, 70, 'Training', style='italic',
+        fontsize=20)
+
+
+ax.text(12, 70, 'Test', style='italic',
+        fontsize=20)
+
+fig.text(0.9, 0.05, '$Day$')
+fig.text(0.1, 0.9, '$Retention$')
+
+plt.legend()
+fig.set_size_inches(10,5)
+plt.show()
 ```
 
-```
-[100.0,
- 92.193944554874,
- 90.31175201855368,
- 89.0225485516031,
- 88.01390928844319,
- 87.17405973206644,
- 86.44868571718936,
- 85.80684085120794,
- 85.22904189196329,
- 84.70214590181364,
- 84.2168251270027,
- 83.76619620410683,
- 83.34501999389707,
- 82.94920723304807,
- 82.57549884659653,
- 82.22125128571703,
- 81.88428776811061,
- 81.56279238315445,
- 81.2552329457299,
- 80.96030364954679]
- ```
+![image](https://user-images.githubusercontent.com/39810993/124994534-d6977400-dffa-11eb-8873-518636c98d5d.png)
