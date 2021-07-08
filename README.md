@@ -120,3 +120,6 @@ plt.show()
 ```
 
 ![image](https://user-images.githubusercontent.com/39810993/124994534-d6977400-dffa-11eb-8873-518636c98d5d.png)
+
+
+As You can see, Our projected value can get close to the actual value with only a few data points (6 days in this case.)
