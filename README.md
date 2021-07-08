@@ -35,6 +35,55 @@ data = io.StringIO(data_string)
 data = pd.read_csv(data, sep=",")
 data['Retention'] = data['Retention'] *100
 
+
+
+
+import scipy.special as sc
+from scipy.optimize import minimize
+from scipy.special import beta
+import numpy as np
+
+def fortell_bdw(surv_value,h):
+    surv = np.array(surv_value)
+
+    if(surv[0] != 100):
+        raise Exception("Starting Value should be 100 or 1")
+
+    t = len(surv)
+    die = np.diff(-surv)
+    i = np.arange(0,t) 
+
+    def bdw_ll(x):
+        a,b,c = x
+        s = beta(a,b + i**c)/beta(a,b)
+        p = np.diff(-s)
+        ll_ = die * np.log(p)
+        ll = ll_.sum() + surv[-1]*np.log(s[-1])
+        return -ll
+
+    bnds = [(0.001,10000)]*3
+
+    res = minimize(bdw_ll, x0=[1,1,1], 
+                    method='L-BFGS-B',
+                    bounds=bnds)
+
+    a, b, c = res.x
+
+    bdw_projection = []
+    k = 0
+    while (sc.beta(res.x[0], res.x[1] + (k**res.x[2])) / sc.beta(res.x[0], res.x[1])) * 100:
+        while k < h:
+            bdw_projection.append((sc.beta(res.x[0], res.x[1] + (k**res.x[2])) / sc.beta(res.x[0], res.x[1])) *100)
+            k = k + 1
+    #         print((sc.beta(res.x[0], res.x[1] + (k**res.x[2])) / sc.beta(res.x[0], res.x[1])))
+        else:
+            break
+    
+    
+#     bdw_projection = pd.DataFrame(bdw_projection,columns =['BdW']).reset_index()
+    return bdw_projection
+
+
 fortell_bdw(surv_value=round(data['Retention'][0:5]),h=18)
 ```
 
