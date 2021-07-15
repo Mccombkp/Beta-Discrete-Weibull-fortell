@@ -122,4 +122,39 @@ plt.show()
 ![image](https://user-images.githubusercontent.com/39810993/124994534-d6977400-dffa-11eb-8873-518636c98d5d.png)
 
 
-As You can see, Our projected value can get close to the actual value with only a few data points (6 days in this case.)
+Using full data you can get the projected data at month 45.
+
+```python
+long_proj = pd.DataFrame(fortell_bdw(surv_value=round(data['Retention']),h=45), columns=['bdw']).reset_index().rename(columns={'index': 'Day'})
+long_proj['Retention'] = data['Retention']
+
+x = long_proj['Day']
+y = long_proj['Retention']
+y2 = long_proj['bdw']
+
+fig, ax = plt.subplots()
+ax.plot(x, y, label = 'Actual',linewidth=2)
+ax.plot(x, y2, label = 'BdW',linewidth=2)
+
+
+ax.set_ylim(bottom=75)
+
+plt.axvline(x=len(data['Retention']) - 1)
+
+
+ax.text(5, 70, 'Actual', style='italic',
+        fontsize=20)
+
+
+ax.text(30, 70, 'Predicted', style='italic',
+        fontsize=20)
+
+fig.text(0.9, 0.05, '$Day$')
+fig.text(0.1, 0.9, '$Retention$')
+
+plt.legend()
+fig.set_size_inches(10,5)
+plt.show()
+```
+
+![image](https://user-images.githubusercontent.com/39810993/125826864-164044d1-6cd2-4562-ae65-f0b508692e02.png)
