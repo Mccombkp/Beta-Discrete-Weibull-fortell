@@ -137,6 +137,11 @@ ax.plot(x, y, label = 'Actual',linewidth=2)
 ax.plot(x, y2, label = 'BdW',linewidth=2)
 
 
+
+plt.annotate('%0.2f' % y2.iloc[-1], xy=(1, y2.iloc[-1]), xytext=(8, 0), 
+             xycoords=('axes fraction', 'data'), textcoords='offset points')
+plt.axhline(y=y2.iloc[-1], color='y', linestyle='-.')
+
 ax.set_ylim(bottom=75)
 
 plt.axvline(x=len(data['Retention']) - 1)
@@ -157,4 +162,4 @@ fig.set_size_inches(10,5)
 plt.show()
 ```
 
-![image](https://user-images.githubusercontent.com/39810993/125826864-164044d1-6cd2-4562-ae65-f0b508692e02.png)
+![image](https://user-images.githubusercontent.com/39810993/125829865-44204344-1672-43e9-821b-41855cd8da0e.png)
